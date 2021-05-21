@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <ion-input placeholder="email" formControlName="email"></ion-input>
+    <ion-label color="danger" *ngIf="!this.form.get('email').valid && this.form.get('email').touched">
+      La email inserita non è valida
+    </ion-label>
+    <ion-input placeholder="password" formControlName="password"></ion-input>
+    <ion-label color="danger" *ngIf="!this.form.get('password').valid && this.form.get('password').touched">
+      La password è obbligatoria
+    </ion-label>
+    <ion-col>
+      <ion-button (click)="redirectToHome()" [disabled]="!this.form.valid">Effettua login</ion-button>
+      <ion-spinner *ngIf="loading"></ion-spinner>
+      <ion-label color="danger" *ngIf="!!error">
+        {{error}}
+      </ion-label>
+    </ion-col>
+  </form>
+</ion-content>
