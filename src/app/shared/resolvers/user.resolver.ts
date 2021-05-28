@@ -1,21 +1,21 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {User} from '../../models/user';
 import {Observable} from 'rxjs';
-import {select, Store} from '@ngrx/store';
-import {selectUser} from '../../store/auth.selectors';
+import {User} from '../../models/user.model';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store/auth.state';
+import {getUser} from '../../store/auth.selectors';
 import {take} from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserResolver implements Resolve<User> {
-  constructor(private store: Store) {}
+  constructor(private store: Store<AppState>) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<User> {
-    return this.store.pipe(
-      select(selectUser),
+    return this.store.select(getUser).pipe(
       take(1)
     );
   }

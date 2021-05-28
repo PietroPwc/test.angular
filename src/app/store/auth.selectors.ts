@@ -1,8 +1,6 @@
-import {createSelector} from '@ngrx/store';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {AppState} from './auth.state';
-import {User} from '../models/user';
 
-export const selectUser = createSelector(
-  (state: AppState) => state.connectedUser,
-  (connectedUser: User) => connectedUser
-);
+const getUserState = createFeatureSelector<AppState>('state');
+
+export const getUser = createSelector(getUserState, (state) => state.connectedUser);

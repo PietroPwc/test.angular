@@ -6,20 +6,12 @@
 
 <ion-content>
   <form [formGroup]="form">
-    <ion-input placeholder="email" formControlName="email"></ion-input>
-    <ion-label color="danger" *ngIf="!this.form.get('email').valid && this.form.get('email').touched">
-      La email inserita non è valida
-    </ion-label>
-    <ion-input placeholder="password" formControlName="password"></ion-input>
-    <ion-label color="danger" *ngIf="!this.form.get('password').valid && this.form.get('password').touched">
-      La password è obbligatoria
-    </ion-label>
-    <ion-col>
-      <ion-button (click)="redirectToHome()" [disabled]="!this.form.valid">Effettua login</ion-button>
-      <ion-spinner *ngIf="loading"></ion-spinner>
-      <ion-label color="danger" *ngIf="!!error">
-        {{error}}
-      </ion-label>
-    </ion-col>
+    <ion-input placeholder="Email" formControlName="email"></ion-input>
+    <ion-label *ngIf="!form.get('email').valid && form.get('email').touched">Email inserita non è corretta</ion-label>
+    <ion-input placeholder="Password" type="password" formControlName="password"></ion-input>
+    <app-custom-button (clicked)="redirectToLogin($event)"></app-custom-button>
+    <ion-label *ngIf="!!message">{{message}}</ion-label>
+    <ion-spinner color="primary" *ngIf="loading"></ion-spinner>
+    <!--<ion-button [disabled]="!form.valid" (click)="redirectToLogin()">Login</ion-button>-->
   </form>
 </ion-content>

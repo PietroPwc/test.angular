@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../shared/auth.service';
-import {User} from '../models/user';
-import {finalize} from 'rxjs/operators';
+import {AuthenticationService} from '../shared/services/authentication.service';
+import {User} from '../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -11,37 +10,35 @@ import {finalize} from 'rxjs/operators';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  loading: boolean;
-  error: string;
   form: FormGroup;
+  message: string;
+  loading: boolean;
 
-  constructor(private route: Router,
-              private auth: AuthService) {
+  constructor(private router: Router,
+              private auth: AuthenticationService) {
     this.form = this.initializeForm();
   }
 
   ngOnInit() {
   }
 
-  redirectToHome() {
+  redirectToLogin(value: boolean) {
+    this.message = null;
     this.loading = true;
-    this.error = null;
 
-    this.auth.login(this.form.get('email').value, this.form.get('password').value)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe((res: User) => {
-      if (!!res) {
-        this.route.navigate(['home']);
-      }
+    this.auth.login(this.form.get('email').value, this.form.get('password').value).subscribe((user: User) => {
+      this.router.navigate(['home']);
     }, error => {
-      this.error = error;
+      this.message = error;
+    }, () => {
+      this.loading = false;
     });
   }
 
   private initializeForm(): FormGroup {
     return new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required])
-    });
+        email: new FormControl(null, [Validators.required, Validators.email]),
+        password: new FormControl(null, [Validators.required])
+      });
   }
 }
